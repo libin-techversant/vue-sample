@@ -1,8 +1,8 @@
 <template>
   <div id="app" class="app-class">
       <h2>This is the root component App.vue</h2>
-      <page1/>
-      <!-- <router-view/> -->
+      <!-- <page1/> -->
+      <router-view/>
   </div>
 </template>
 <script>

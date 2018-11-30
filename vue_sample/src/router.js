@@ -14,9 +14,10 @@ export default new Router({
       component: Home
     },
     {
-      path: '/page1',
+      path: '/page1/:param',
       name: 'page1',
-      component: Page1
+      component: Page1,
+      props:true
     },
     {
       path: '/page2',

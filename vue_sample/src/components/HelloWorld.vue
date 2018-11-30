@@ -2,6 +2,7 @@
   <div class="hello">
     <h4>Hello world component showing from {{parentName}}</h4>
     <p>{{msg}}</p>
+    <button @click="triggerEvent()">Generate Random No</button>
   </div>
 </template>
 
@@ -12,6 +13,11 @@ export default {
   data() {
     return{
       msg : 'Welcome to hello world'
+    }
+  },
+  methods : {
+    triggerEvent(){
+      this.$emit('customEvent', Math.random());
     }
   }
 }
