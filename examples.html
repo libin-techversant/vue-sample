@@ -1,0 +1,212 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <style>
+        body {
+            background: #20262E;
+            padding: 20px;
+            font-family: Helvetica;
+        }
+
+        #app {
+            background: #fff;
+            border-radius: 4px;
+            padding: 20px;
+            transition: all 0.2s;
+        }
+        .form-section{
+            width: 50%;
+            float: left;
+            height: 500px;
+        }
+        .preview{
+            width: 50%;
+            float: left;
+            height: 500px;
+            font-size: 20px;
+            padding-right: 20px;
+            padding-left: 20px;
+        }
+        .custom-class{
+            color: red
+        }
+        .watchers{
+            margin-top: 15px;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <div class="form-section">
+            <form>
+                <div class="form-group">
+                    <label for="fname">First Name:</label>
+                    <input type="text" class="form-control" id="fname" placeholder="First Name" v-model="firstName"/>
+                </div>
+                <div class="form-group">
+                    <label for="lname">Last Name:</label>
+                    <input type="text" class="form-control" id="lname" placeholder="Last Name" v-model="lastName"/>
+                </div>
+                <div class="form-group">
+                    <label for="dob">DOB:</label>
+                    <input type="text" class="form-control" id="dob" placeholder="yyyy-mm-dd" v-model="dob"/>
+                </div>
+                <div class="form-group">
+                    <label for="dob">Gender:</label>
+                    <input type="radio" value="Male" v-model="gender"/>
+                    <label for="one">Male</label>
+                    <input type="radio" value="Female" v-model="gender"/>
+                    <label for="one">Female</label>
+                </div>
+                <div class="form-group">
+                    <label>Qualification:</label>
+                    <input id="bca" type="checkbox"  value="BCA"  v-model="qualification">
+                    <label for="bca">BCA</label>
+                    <input id="mca" type="checkbox"  value="MCA" v-model="qualification">
+                    <label for="mca">MCA</label>
+                </div>
+                <div class="form-group">
+                    <label for="stat">Status</label>
+                    <select class="form-control" id="stat" v-model="status" >
+                        <option value="0" :disabled="true">Please select</option>
+                        <option value="Trainee">Trainee</option>
+                        <option value="Permanent">Permanent</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <button type="button" @click="add" class="btn btn-default">Add</button>
+                </div>
+            </form>
+        </div>
+        
+        <div class="preview">
+            <h3>Preview</h3>
+            <div class="item">
+                <div>Full name : {{fullName}}</div> 
+            </div>
+            <div class="item">
+                <div>Gender : {{gender}}</div> 
+            </div>
+            <div class="item">
+                <div>Qualification : {{qualification.join()}}</div> 
+            </div>
+            <div class="item">
+                <div :class="{'custom-class' : getAge() > 50}">Age : {{getAge()}}</div> 
+            </div>
+        </div>
+        <div class="listing">
+            <h3>Listing</h3>
+            <table class="table">
+                <tr>
+                    <th>Name</th>
+                    <th>Gender</th>
+                    <th>Status</th>
+                    <th>DOB</th>
+                </tr>
+                <tr v-for="(item,index) in persons">
+                    <td>{{item.name}}</td>
+                    <td>{{item.gender}}</td>
+                    <td>{{item.status}}</td>
+                    <td>{{item.dob}}</td>
+                </tr>
+                
+            </table>
+        </div>
+        <div class="watchers">
+            <h3>Example for watchers</h3>
+            <label for="km">Distance in KM</label>
+            <input type="text" id="km" v-model="kilometer"/>
+            <label for="m">Distance in M</label>
+            <input type="text" id="m"v-model="meter"/>
+        </div>
+        <button @click="destroyInstance">Destroy</button>
+    </div>
+    <script>
+        var vm = new Vue({
+            el: "#app",
+            data(){
+                return{
+                    firstName : '',
+                    lastName : '',
+                    gender : '',
+                    qualification : [],
+                    status : 0,
+                    dob : '',
+                    persons : [],
+                    kilometer : 0,
+                    meter : 0,
+                }
+            },
+            computed : {
+                fullName(){
+                    return this.firstName+' '+this.lastName;
+                }
+            },
+            watch : {
+                kilometer : function(val){
+                    this.meter = val*1000;
+                },
+                meter : function(val){
+                    this.kilometer = val/1000;
+                }
+            },
+            methods : {
+                getAge(){
+                    if(this.dob.match(/([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/g)){
+                        var diff_ms = Date.now() - new Date(this.dob).getTime();
+                        var age_dt = new Date(diff_ms); 
+                        return Math.abs(age_dt.getUTCFullYear() - 1970)
+                    }else{
+                        return '';
+                    }
+                },
+                add(){
+                    this.persons.push({
+                        name : this.firstName+' '+this.lastName,
+                        gender : this.gender,
+                        status : this.status,
+                        dob : this.dob
+                    });
+                    this.reset();
+                },
+                reset(){
+                    this.firstName = '';
+                    this.lastName = '';
+                    this.gender = '';
+                    this.qualification = [];
+                    this.status = '';
+                    this.dob = '';
+                },
+                destroyInstance(){
+                    this.$destroy();
+                }
+            },
+            beforeMount(){
+                console.log("beforeMount");
+            },
+            mounted(){
+                console.log("Mounted");
+            },
+            beforeCreate(){
+                console.log("beforeCreate");
+            },
+            created(){
+                console.log("Created");
+            },
+            beforeUpdate(){
+                console.log("beforeUpdate");
+            },
+            updated(){
+                console.log("updated");
+            },
+            beforeDestroy(){
+                console.log("beforeDestroy");
+            },
+            destroyed(){
+                console.log("destroyed");
+            }
+        })
+    </script>
+</body>
+</html>
