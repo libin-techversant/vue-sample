@@ -2,7 +2,7 @@
 
 A sample vue.js project
 
-Navigate to "vue-sample" directory
+Navigate to "vue_sample" directory
 
 ### install  dependencies
 ```
