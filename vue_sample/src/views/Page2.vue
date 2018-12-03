@@ -1,7 +1,11 @@
 <template>
   <div class="page2">
       <h2>This is page2</h2>
-      <hello-world :parentName="'PAGE 2'"/>
+      <div>
+        <button @click="$store.commit('updateCountMutation', 10)">Update state with mutation</button>
+        <button @click="$store.dispatch('updateCountAction', 20)">Update state with action</button>
+        Current value of count : {{$store.state.count}}
+      </div>
   </div>
 </template>
 <script>
