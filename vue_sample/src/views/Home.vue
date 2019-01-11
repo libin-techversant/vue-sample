@@ -2,6 +2,7 @@
   <div class="home">
       <h2>This is home page</h2>
       <router-link :to="'/page2'">Go to page 2</router-link>
+      <router-link :to="{ name: 'page3', params: { id: 123 }}">Go to page 3</router-link>
       <button @click="goToPage1">Go to page 1</button>
       <pre v-if="Object.keys(users).length > 0">
         {{JSON.stringify(users,undefined, 10)}}
